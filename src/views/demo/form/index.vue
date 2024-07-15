@@ -48,7 +48,7 @@
             labelField="name"
             valueField="id"
             :params="searchParams"
-            @search="useDebounceFn(onSearch, 300)"
+            @search="debounceOptionsFn"
           />
         </template>
       </BasicForm>
@@ -71,6 +71,7 @@
   import { areaRecord } from '@/api/demo/cascader';
   import { uploadApi } from '@/api/sys/upload';
 
+  let debounceOptionsFn = useDebounceFn(onSearch, 300);
   const valueSelectA = ref<string[]>([]);
   const valueSelectB = ref<string[]>([]);
   const options = ref<Required<SelectProps>['options']>([]);
@@ -152,12 +153,13 @@
     {
       field: 'field1',
       component: 'Input',
-      label: '字段1',
+      label: ({ model }) => {
+        return `字段1${model.field3 ? model.field3 : ''}`;
+      },
 
       colProps: {
         span: 8,
       },
-      // componentProps:{},
       // can func
       componentProps: ({ schema, formModel }) => {
         console.log('form:', schema);
@@ -457,7 +459,6 @@
     },
     {
       field: 'field31',
-      // component: 'Input',
       label: '下拉本地搜索',
       helpMessage: ['ApiSelect组件', '远程数据源本地搜索', '只发起一次请求获取所有选项'],
       required: true,
@@ -472,7 +473,6 @@
     },
     {
       field: 'field32',
-      // component: 'Input',
       label: '下拉远程搜索',
       helpMessage: ['ApiSelect组件', '将关键词发送到接口进行远程搜索'],
       required: true,
@@ -687,7 +687,6 @@
     },
     {
       field: 'selectA',
-      // component: 'Select',
       label: '互斥SelectA',
       slot: 'selectA',
       defaultValue: [],
@@ -697,7 +696,6 @@
     },
     {
       field: 'selectB',
-      // component: 'Select',
       label: '互斥SelectB',
       slot: 'selectB',
       defaultValue: [],

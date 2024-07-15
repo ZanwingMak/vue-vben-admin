@@ -84,6 +84,7 @@
     'ok',
     'register',
     'update:open',
+    'fullscreen',
   ]);
 
   const attrs = useAttrs();
@@ -119,7 +120,11 @@
     };
   });
 
-  const { handleFullScreen, getWrapClassName, fullScreenRef } = useFullScreen({
+  const {
+    handleFullScreen: handleFullScreenInner,
+    getWrapClassName,
+    fullScreenRef,
+  } = useFullScreen({
     modalWrapperRef,
     extHeightRef,
     wrapClassName: toRef(getMergeProps.value, 'wrapClassName'),
@@ -146,8 +151,11 @@
       ...unref(getMergeProps),
       open: unref(openRef),
     };
-    attr['wrapClassName'] =
-      `${attr?.['wrapClassName'] || ''} ${unref(getWrapClassName)}` + 'vben-basic-modal-wrap';
+    if (attr?.['wrapClassName'] === unref(getWrapClassName)) {
+      attr['wrapClassName'] = `${attr?.['wrapClassName'] || ''} ` + prefixCls;
+    } else {
+      attr['wrapClassName'] = `${unref(getWrapClassName) || ''}` + prefixCls;
+    }
     if (unref(fullScreenRef)) {
       return omit(attr, ['height', 'title']);
     }
@@ -228,5 +236,11 @@
     if (!props.canFullscreen) return;
     e.stopPropagation();
     handleFullScreen(e);
+  }
+
+  // 事件传递
+  function handleFullScreen(e) {
+    handleFullScreenInner(e);
+    emit('fullscreen');
   }
 </script>
