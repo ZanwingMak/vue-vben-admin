@@ -159,4 +159,6 @@ export interface GlobEnvConfig {
   VITE_GLOB_API_URL_PREFIX?: string;
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string;
+  // localstore的key值是否拼接版本号
+  VITE_GLOB_LOCALSTORE_SPLICING_VERSION?: boolean | string;
 }

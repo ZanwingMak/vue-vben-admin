@@ -9,7 +9,15 @@ export function getCommonStoragePrefix() {
 
 // Generate cache key according to version
 export function getStorageShortName() {
-  return `${getCommonStoragePrefix()}${`__${pkg.version}`}__`.toUpperCase();
+  const { VITE_GLOB_LOCALSTORE_SPLICING_VERSION } = getAppEnvConfig();
+  // localstore的key值是否拼接版本号
+  if (VITE_GLOB_LOCALSTORE_SPLICING_VERSION === 'true') {
+    // localstore key值拼接版本号
+    return `${getCommonStoragePrefix()}${`__${pkg.version}`}__`.toUpperCase();
+  } else {
+    // 不拼接版本号
+    return `${getCommonStoragePrefix()}__`.toUpperCase();
+  }
 }
 
 const getVariableName = (title: string) => {
@@ -30,7 +38,12 @@ export function getAppEnvConfig() {
     ? // Get the global configuration (the configuration will be extracted independently when packaging)
       (import.meta.env as unknown as GlobEnvConfig)
     : (window[ENV_NAME] as unknown as GlobEnvConfig);
-  const { VITE_GLOB_APP_TITLE, VITE_GLOB_API_URL_PREFIX, VITE_GLOB_UPLOAD_URL } = ENV;
+  const {
+    VITE_GLOB_APP_TITLE,
+    VITE_GLOB_API_URL_PREFIX,
+    VITE_GLOB_UPLOAD_URL,
+    VITE_GLOB_LOCALSTORE_SPLICING_VERSION,
+  } = ENV;
   let { VITE_GLOB_API_URL } = ENV;
   if (localStorage.getItem(API_ADDRESS)) {
     const address = JSON.parse(localStorage.getItem(API_ADDRESS) || '{}');
@@ -41,6 +54,7 @@ export function getAppEnvConfig() {
     VITE_GLOB_API_URL,
     VITE_GLOB_API_URL_PREFIX,
     VITE_GLOB_UPLOAD_URL,
+    VITE_GLOB_LOCALSTORE_SPLICING_VERSION,
   };
 }
 

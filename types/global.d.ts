@@ -68,6 +68,8 @@ declare global {
     VITE_PUBLIC_PATH: string;
     VITE_GLOB_APP_TITLE: string;
     VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
+    // localstore的key值是否拼接版本号
+    VITE_GLOB_LOCALSTORE_SPLICING_VERSION?: boolean | string;
   }
 
   declare function parseInt(s: string | number, radix?: number): number;

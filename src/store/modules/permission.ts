@@ -221,8 +221,9 @@ export const usePermissionStore = defineStore({
           // 这个功能可能只需要执行一次，实际项目可以自己放在合适的时间
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            await this.changePermissionCode();
+            await this.changePermissionCode(); // 获取颗粒度权限
             routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            console.log('routeList:', routeList);
           } catch (error) {
             console.error(error);
           }
